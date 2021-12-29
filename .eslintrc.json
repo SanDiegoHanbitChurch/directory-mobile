@@ -16,6 +16,7 @@
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
     "react/style-prop-object": "off",
+    "import/prefer-default-export": "off",
     "prettier/prettier": [
       "error",
       {
