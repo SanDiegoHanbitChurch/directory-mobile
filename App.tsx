@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import Members from './src/components/Members';
+import Members from './src/components/MembersList';
 
 const queryClient = new QueryClient();
 

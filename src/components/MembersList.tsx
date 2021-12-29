@@ -6,6 +6,7 @@ import {
   Button,
   StyleSheet,
   FlatList,
+  Image,
 } from 'react-native';
 
 import { Member } from '../api/member';
@@ -25,19 +26,33 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 20,
   },
-  separator: {},
+  avatar: {
+    width: 50,
+    height: 50,
+    marginRight: 20,
+  },
 });
 
-function Members() {
+function MembersList() {
   const { data, isLoading, isError, refetch } = useMembers();
 
   const renderItem = (member: Member) => (
     <View style={styles.item}>
-      <Text>{member.name}</Text>
-      <Text>{member.email}</Text>
-      <Text>{member.phone}</Text>
+      <Image
+        source={{
+          uri: member.avatar,
+        }}
+        style={styles.avatar}
+      />
+      <View style={styles.container}>
+        <Text>{member.name}</Text>
+        <Text>{member.email}</Text>
+        <Text>{member.phone}</Text>
+      </View>
       <View />
     </View>
   );
@@ -66,4 +81,4 @@ function Members() {
   );
 }
 
-export default Members;
+export default MembersList;
