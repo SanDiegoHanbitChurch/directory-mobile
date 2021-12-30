@@ -17,6 +17,7 @@ export default {
   },
   assetBundlePatterns: ['**/*'],
   ios: {
+    bundleIdentifier: 'org.sdhanbit.mobile',
     supportsTablet: true,
   },
   android: {
@@ -24,6 +25,7 @@ export default {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#FFFFFF',
     },
+    package: 'org.sdhanbit.mobile',
   },
   web: {
     favicon: './assets/favicon.png',
