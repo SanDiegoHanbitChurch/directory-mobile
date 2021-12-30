@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import * as Google from 'expo-auth-session/providers/google';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
-import { StyleSheet, View, Button, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 import { auth } from '../firebase';
 import { useAuth } from '../context/auth-context';
@@ -13,20 +13,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
+  },
 });
 
 export default function SignInScreen() {
   const { signInWithGoogle } = useAuth();
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId:
-      '575510018711-g7ifvopac2j3qt368e4s0okfeg460mu7.apps.googleusercontent.com',
     expoClientId:
       '575510018711-u15bc2aftkkegcj1s1mj4uje1v70m9re.apps.googleusercontent.com',
-    iosClientId:
-      '575510018711-ppeumetei06dan08nkdvov3e2ht1ot0t.apps.googleusercontent.com',
     androidClientId:
       '575510018711-oifl5jh2ddc3u621lfjnu5kte7pb8av3.apps.googleusercontent.com',
+    iosClientId:
+      '575510018711-ppeumetei06dan08nkdvov3e2ht1ot0t.apps.googleusercontent.com',
   });
 
   React.useEffect(() => {
@@ -43,13 +46,15 @@ export default function SignInScreen() {
     <View style={styles.container}>
       <Text>San Diego Hanbit Church</Text>
       <Text>Directory Mobile</Text>
-      <Button
+      <TouchableOpacity
+        style={styles.button}
         disabled={!request}
-        title="Sign In with Google"
         onPress={() => {
           promptAsync();
         }}
-      />
+      >
+        <Text>Sign In With Google</Text>
+      </TouchableOpacity>
       <StatusBar />
     </View>
   );
