@@ -21,6 +21,12 @@ export default function SignInScreen() {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
     clientId:
       '575510018711-g7ifvopac2j3qt368e4s0okfeg460mu7.apps.googleusercontent.com',
+    expoClientId:
+      '575510018711-u15bc2aftkkegcj1s1mj4uje1v70m9re.apps.googleusercontent.com',
+    iosClientId:
+      '575510018711-ppeumetei06dan08nkdvov3e2ht1ot0t.apps.googleusercontent.com',
+    androidClientId:
+      '575510018711-oifl5jh2ddc3u621lfjnu5kte7pb8av3.apps.googleusercontent.com',
   });
 
   React.useEffect(() => {
