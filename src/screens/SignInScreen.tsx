@@ -28,6 +28,7 @@ export default function SignInScreen() {
     expoClientId: Constants.manifest?.extra?.expoClientId,
     androidClientId: Constants.mainfest?.extra?.androidClientId,
     iosClientId: Constants.manifest?.extra?.iosClientId,
+    webClientId: Constants.manifest?.extra?.webClientId,
   });
 
   React.useEffect(() => {
