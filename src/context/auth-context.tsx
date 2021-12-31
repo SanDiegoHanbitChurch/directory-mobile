@@ -11,7 +11,7 @@ interface IAuthProviderState {
 
 interface IAuthContext {
   currentUser: User | null;
-  signInWithGoogle: (user: User) => void;
+  signIn: (user: User) => void;
   signOut: () => void;
 }
 
@@ -54,7 +54,7 @@ function AuthProvider(props: AuthProviderProps) {
     return <LoadingView />;
   }
 
-  function signInWithGoogle(user: User) {
+  function signIn(user: User) {
     setState({
       loading: false,
       currentUser: user,
@@ -85,7 +85,7 @@ function AuthProvider(props: AuthProviderProps) {
       // eslint-disable-next-line react/jsx-no-constructed-context-values
       value={{
         currentUser: state.currentUser,
-        signInWithGoogle,
+        signIn,
         signOut,
       }}
       // eslint-disable-next-line react/jsx-props-no-spreading

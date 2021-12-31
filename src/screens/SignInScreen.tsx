@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 });
 
 export default function SignInScreen() {
-  const { signInWithGoogle } = useAuth();
+  const { signIn } = useAuth();
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
     expoClientId: Constants.manifest?.extra?.expoClientId,
@@ -35,7 +35,7 @@ export default function SignInScreen() {
       const { id_token: idToken } = response.params;
       const credential = GoogleAuthProvider.credential(idToken);
       signInWithCredential(auth, credential).then(({ user }) => {
-        signInWithGoogle(user);
+        signIn(user);
       });
     }
   }, [response]);
