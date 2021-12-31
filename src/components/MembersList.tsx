@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import { Member } from '../api/member';
+import { useAuth } from '../context/auth-context';
 import { useMembers } from '../hooks/member';
 
 const styles = StyleSheet.create({
@@ -38,7 +39,8 @@ const styles = StyleSheet.create({
 });
 
 function MembersList() {
-  const { data, isLoading, isError, refetch } = useMembers();
+  const { currentUser } = useAuth();
+  const { data, isLoading, isError, refetch } = useMembers(currentUser!);
 
   const renderItem = (member: Member) => (
     <View style={styles.item}>
