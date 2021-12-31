@@ -16,6 +16,8 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
+    "react/function-component-definition": "off",
+    "react/require-default-props": "off",
     "react/style-prop-object": "off",
     "import/prefer-default-export": "off",
     "prettier/prettier": [
