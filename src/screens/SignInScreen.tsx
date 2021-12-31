@@ -3,11 +3,12 @@ import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 import * as Google from 'expo-auth-session/providers/google';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 
 import { auth } from '../firebase';
 import { useAuth } from '../context/auth-context';
 import GoogleSignInButton from '../components/GoogleSignInButton';
+import logo from '../../assets/hanbitlogo.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,9 +16,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 24,
-    paddingVertical: 30,
+  logo: {
+    marginVertical: 30,
   },
 });
 
@@ -42,7 +42,7 @@ export default function SignInScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hanbit Church Directory</Text>
+      <Image source={logo} style={styles.logo} />
       <GoogleSignInButton onPress={() => promptAsync()} disabled={!request} />
       <StatusBar />
     </View>
