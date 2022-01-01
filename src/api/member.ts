@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { User } from 'firebase/auth';
 
-const baseUrl =
-  'https://us-central1-hanbit-directory-dev.cloudfunctions.net/v1';
+import { apiBaseUrl } from '.';
 
 export interface Member {
   id: string;
@@ -22,7 +21,7 @@ export const getAllMembers = async (
   offset = 0
 ): Promise<GetAllMembersPayload> => {
   const idToken = await currentUser.getIdToken();
-  const url = baseUrl.concat('/members');
+  const url = apiBaseUrl.concat('/members');
   const res = await axios({
     method: 'get',
     url,

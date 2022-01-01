@@ -37,5 +37,6 @@ export default (): ExpoConfig => ({
     androidClientId: process.env.ANDROID_CLIENT_ID,
     iosClientId: process.env.IOS_CLIENT_ID,
     webClientId: process.env.WEB_CLIENT_ID,
+    apiBaseUrl: process.env.API_BASE_URL,
   },
 });
