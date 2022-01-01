@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import * as React from 'react';
 import {
   View,
@@ -8,10 +9,10 @@ import {
   FlatList,
   Image,
 } from 'react-native';
+import { useInfiniteQuery } from 'react-query';
 
-import { Member } from '../api/member';
+import { Member, getAllMembers, GetAllMembersPayload } from '../api/member';
 import { useAuth } from '../context/auth-context';
-import { useMembers } from '../hooks/member';
 
 const styles = StyleSheet.create({
   container: {
@@ -40,10 +41,17 @@ const styles = StyleSheet.create({
 
 function MembersList() {
   const { currentUser } = useAuth();
-  const { data, isLoading, isError, refetch } = useMembers(currentUser!);
+  const { data, error, fetchNextPage, isFetching, isFetchingNextPage, status } =
+    useInfiniteQuery<GetAllMembersPayload, AxiosError>(
+      'members',
+      ({ pageParam }) => getAllMembers(currentUser!, pageParam),
+      {
+        getNextPageParam: (lastPage) => lastPage.nextOffset,
+      }
+    );
 
   const renderItem = (member: Member) => (
-    <View style={styles.item}>
+    <View style={styles.item} key={member.id}>
       <Image
         source={{
           uri: member.avatar,
@@ -59,26 +67,28 @@ function MembersList() {
     </View>
   );
 
-  if (isLoading) {
-    return (
-      <View style={[styles.container, styles.loadingOrError]}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+  const flattenData = data?.pages
+    ? data?.pages?.flatMap((page) => [...page.data])
+    : [];
 
-  if (isError) {
-    return (
-      <View style={[styles.container, styles.loadingOrError]}>
-        <Text>Error loading members.</Text>
-        <Button title="Retry" onPress={() => refetch()} />
-      </View>
-    );
-  }
-
-  return (
+  // eslint-disable-next-line no-nested-ternary
+  return status === 'loading' ? (
+    <View style={[styles.container, styles.loadingOrError]}>
+      <ActivityIndicator size="large" />
+    </View>
+  ) : status === 'error' ? (
+    <View style={[styles.container, styles.loadingOrError]}>
+      <Text>Error: {error?.message}</Text>
+    </View>
+  ) : (
     <View style={[styles.container, styles.list]}>
-      <FlatList data={data} renderItem={({ item }) => renderItem(item)} />
+      <FlatList
+        data={flattenData}
+        renderItem={({ item }) => renderItem(item)}
+        onEndReached={() => fetchNextPage()}
+        onEndReachedThreshold={0.1}
+        refreshing={isFetching || isFetchingNextPage}
+      />
     </View>
   );
 }
