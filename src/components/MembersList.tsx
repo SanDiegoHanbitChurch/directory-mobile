@@ -1,25 +1,11 @@
-import { AxiosError } from 'axios';
 import * as React from 'react';
-import {
-  View,
-  ActivityIndicator,
-  Text,
-  StyleSheet,
-  FlatList,
-  Image,
-} from 'react-native';
-import { useInfiniteQuery } from 'react-query';
+import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
 
-import { Member, getAllMembers, GetAllMembersPayload } from '../api/member';
-import { useAuth } from '../context/auth-context';
+import { Member } from '../api/member';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  loadingOrError: {
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   list: {
     paddingVertical: 50,
@@ -38,17 +24,17 @@ const styles = StyleSheet.create({
   },
 });
 
-function MembersList() {
-  const { currentUser } = useAuth();
-  const { data, error, fetchNextPage, isFetching, isFetchingNextPage, status } =
-    useInfiniteQuery<GetAllMembersPayload, AxiosError>(
-      'members',
-      ({ pageParam }) => getAllMembers(currentUser!, pageParam),
-      {
-        getNextPageParam: (lastPage) => lastPage.nextOffset,
-      }
-    );
+interface MembersListProps {
+  members: Member[];
+  onEndReached: () => void;
+  refreshing: boolean;
+}
 
+export default function MembersList({
+  members,
+  onEndReached,
+  refreshing,
+}: MembersListProps) {
   const renderItem = (member: Member) => (
     <View style={styles.item} key={member.id}>
       <Image
@@ -66,30 +52,15 @@ function MembersList() {
     </View>
   );
 
-  const flattenData = data?.pages
-    ? data?.pages?.flatMap((page) => [...page.data])
-    : [];
-
-  // eslint-disable-next-line no-nested-ternary
-  return status === 'loading' ? (
-    <View style={[styles.container, styles.loadingOrError]}>
-      <ActivityIndicator size="large" />
-    </View>
-  ) : status === 'error' ? (
-    <View style={[styles.container, styles.loadingOrError]}>
-      <Text>Error: {error?.message}</Text>
-    </View>
-  ) : (
+  return (
     <View style={[styles.container, styles.list]}>
       <FlatList
-        data={flattenData}
+        data={members}
         renderItem={({ item }) => renderItem(item)}
-        onEndReached={() => fetchNextPage()}
+        onEndReached={onEndReached}
         onEndReachedThreshold={0.1}
-        refreshing={isFetching || isFetchingNextPage}
+        refreshing={refreshing}
       />
     </View>
   );
 }
-
-export default MembersList;
