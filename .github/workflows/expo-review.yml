@@ -15,6 +15,12 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
       - run: npm install
       - run: expo publish --release-channel=pr-${{ github.event.number }}
+        env:
+          EXPO_CLIENT_ID: ${{ secrets.EXPO_CLIENT_ID }}
+          ANDROID_CLIENT_ID: ${{ secrets.ANDROID_CLIENT_ID }}
+          IOS_CLIENT_ID: ${{ secrets.IOS_CLIENT_ID }}
+          WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
       - uses: unsplash/comment-on-pr@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
