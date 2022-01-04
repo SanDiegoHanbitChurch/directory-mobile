@@ -2,11 +2,12 @@ import * as React from 'react';
 import { View, StyleSheet, Button, Text } from 'react-native';
 import { useInfiniteQuery } from 'react-query';
 import { AxiosError } from 'axios';
+import { SearchBar } from 'react-native-elements';
 
-import { getAllMembers, GetAllMembersPayload } from '../api/member';
+import { getMembers, GetMembersPayload } from '../api/member';
 import MembersList from '../components/MembersList';
 import { useAuth } from '../context/auth-context';
-import LoadingView from '../components/LoadingView';
+import { useDebounce } from '../hooks/useDebounce';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,26 +18,23 @@ const styles = StyleSheet.create({
 });
 
 export default function HomeScreen() {
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 1000);
+
   const { currentUser, signOut } = useAuth();
   const { data, error, fetchNextPage, isFetching, isFetchingNextPage, status } =
-    useInfiniteQuery<GetAllMembersPayload, AxiosError>(
-      'members',
-      ({ pageParam }) => getAllMembers(currentUser!, pageParam),
+    useInfiniteQuery<GetMembersPayload, AxiosError>(
+      ['members', debouncedSearchQuery],
+      ({ pageParam }) =>
+        getMembers(currentUser!, debouncedSearchQuery, pageParam),
       {
         getNextPageParam: (lastPage) => lastPage.nextOffset,
       }
     );
 
-  if (status === 'loading') {
-    return <LoadingView message="Getting members..." />;
-  }
-  if (status === 'error') {
-    return (
-      <View style={styles.container}>
-        <Text>{error?.message}</Text>
-      </View>
-    );
-  }
+  const updateSearch = (search: string) => {
+    setSearchQuery(search);
+  };
 
   const flatData = data?.pages
     ? data?.pages?.flatMap((page) => [...page.data])
@@ -45,9 +43,16 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text>Current User: {currentUser?.email}</Text>
+      <SearchBar
+        placeholder="Type here..."
+        // @ts-expect-error
+        onChangeText={(text) => updateSearch(text)}
+        value={searchQuery}
+        lightTheme
+      />
       <MembersList
         members={flatData}
-        onEndReached={fetchNextPage}
+        onEndReached={searchQuery === '' ? fetchNextPage : () => {}}
         refreshing={isFetching || isFetchingNextPage}
       />
       <Button title="Logout" onPress={() => signOut()} />

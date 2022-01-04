@@ -31,7 +31,7 @@ interface MembersListProps {
 }
 
 export default function MembersList({
-  members,
+  members = [],
   onEndReached,
   refreshing,
 }: MembersListProps) {
@@ -58,7 +58,7 @@ export default function MembersList({
         data={members}
         renderItem={({ item }) => renderItem(item)}
         onEndReached={onEndReached}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.5}
         refreshing={refreshing}
       />
     </View>
