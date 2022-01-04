@@ -11,15 +11,16 @@ export interface Member {
   email: string;
 }
 
-export interface GetAllMembersPayload {
+export interface GetMembersPayload {
   data: Member[];
   nextOffset: number;
 }
 
-export const getAllMembers = async (
+export const getMembers = async (
   currentUser: User,
+  searchTerm: string,
   offset = 0
-): Promise<GetAllMembersPayload> => {
+): Promise<GetMembersPayload> => {
   const idToken = await currentUser.getIdToken();
   const url = apiBaseUrl.concat('/members');
   const res = await axios({
@@ -30,8 +31,10 @@ export const getAllMembers = async (
     },
     params: {
       offset,
+      query: searchTerm,
     },
   });
+
   return {
     data: res.data as Member[],
     nextOffset: offset + 25,
