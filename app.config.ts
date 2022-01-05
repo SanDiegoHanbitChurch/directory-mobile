@@ -20,6 +20,7 @@ export default (): ExpoConfig => ({
   ios: {
     bundleIdentifier: 'org.sdhanbit.mobile',
     supportsTablet: true,
+    buildNumber: '1.0.0',
   },
   android: {
     adaptiveIcon: {
@@ -27,6 +28,7 @@ export default (): ExpoConfig => ({
       backgroundColor: '#FFFFFF',
     },
     package: 'org.sdhanbit.mobile',
+    versionCode: 1,
   },
   web: {
     favicon: './assets/favicon.png',
