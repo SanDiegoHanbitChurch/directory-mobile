@@ -3,12 +3,20 @@ import { User } from 'firebase/auth';
 
 import { apiBaseUrl } from '.';
 
+interface Address {
+  city: string;
+  state: string;
+  street: string;
+  zip: string;
+}
+
 export interface Member {
   id: string;
   name: string;
   avatar: string;
   phone: string;
   email: string;
+  address: Address;
 }
 
 export interface GetMembersPayload {
