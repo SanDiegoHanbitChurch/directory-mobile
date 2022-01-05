@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Text, StyleSheet, View, TouchableHighlight } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Button } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#4C8BF5',
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
@@ -13,10 +13,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonIcon: {
-    marginRight: 20,
+    marginRight: 10,
   },
   buttonText: {
-    color: 'white',
     fontSize: 18,
   },
 });
@@ -26,24 +25,25 @@ interface GoogleSignInButtonProps {
   disabled?: boolean;
 }
 
-const GoogleSignInButton = ({ onPress, disabled }: GoogleSignInButtonProps) => (
-  <TouchableHighlight
-    style={styles.button}
-    underlayColor="#4C8BF5"
-    activeOpacity={0.4}
-    disabled={disabled}
-    onPress={onPress}
-  >
-    <View style={styles.buttonContents}>
-      <AntDesign
-        style={styles.buttonIcon}
-        name="google"
-        size={20}
-        color="white"
-      />
-      <Text style={styles.buttonText}>Sign in with Google</Text>
-    </View>
-  </TouchableHighlight>
-);
-
-export default GoogleSignInButton;
+export default function GoogleSignInButton({
+  onPress,
+  disabled,
+}: GoogleSignInButtonProps) {
+  return (
+    <Button
+      title="Sign In with Google"
+      titleStyle={styles.buttonText}
+      buttonStyle={styles.button}
+      icon={
+        <AntDesign
+          style={styles.buttonIcon}
+          name="google"
+          size={20}
+          color="white"
+        />
+      }
+      onPress={onPress}
+      disabled={disabled}
+    />
+  );
+}
