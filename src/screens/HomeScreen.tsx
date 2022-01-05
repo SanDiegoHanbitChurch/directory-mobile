@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { View, StyleSheet, Button, Text } from 'react-native';
+import { View, StyleSheet, StatusBar, Platform } from 'react-native';
 import { useInfiniteQuery } from 'react-query';
 import { AxiosError } from 'axios';
-import { SearchBar } from 'react-native-elements';
+import { SearchBar, Text, Button } from 'react-native-elements';
 
 import { getMembers, GetMembersPayload } from '../api/member';
 import MembersList from '../components/MembersList';
@@ -12,17 +12,22 @@ import { useDebounce } from '../hooks/useDebounce';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 50,
-    paddingHorizontal: '5%',
+    padding: '5%',
+  },
+  greetingTitle: {
+    marginBottom: 10,
   },
 });
 
+type MobilePlatforms = 'ios' | 'android' | 'default';
+
 export default function HomeScreen() {
+  // Search bar
   const [searchQuery, setSearchQuery] = React.useState('');
   const debouncedSearchQuery = useDebounce(searchQuery, 1000);
 
   const { currentUser, signOut } = useAuth();
-  const { data, error, fetchNextPage, isFetching, isFetchingNextPage, status } =
+  const { data, fetchNextPage, isFetching, isFetchingNextPage } =
     useInfiniteQuery<GetMembersPayload, AxiosError>(
       ['members', debouncedSearchQuery],
       ({ pageParam }) =>
@@ -40,22 +45,27 @@ export default function HomeScreen() {
     ? data?.pages?.flatMap((page) => [...page.data])
     : [];
 
+  const platform = Platform.OS as MobilePlatforms;
+
   return (
     <View style={styles.container}>
-      <Text>Current User: {currentUser?.email}</Text>
+      <Text style={styles.greetingTitle} h4>
+        Hello, {currentUser?.displayName}.
+      </Text>
       <SearchBar
         placeholder="Type here..."
         // @ts-expect-error
         onChangeText={(text) => updateSearch(text)}
         value={searchQuery}
-        lightTheme
+        platform={platform}
       />
       <MembersList
         members={flatData}
         onEndReached={searchQuery === '' ? fetchNextPage : () => {}}
         refreshing={isFetching || isFetchingNextPage}
       />
-      <Button title="Logout" onPress={() => signOut()} />
+      <Button title="Sign Out" onPress={() => signOut()} />
+      <StatusBar />
     </View>
   );
 }
