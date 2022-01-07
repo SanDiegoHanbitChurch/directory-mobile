@@ -2,7 +2,7 @@ import { ExpoConfig } from '@expo/config';
 import 'dotenv/config';
 
 export default (): ExpoConfig => ({
-  name: 'directory-mobile',
+  name: 'San Diego Hanbit',
   slug: 'directory-mobile',
   owner: 'san-diego-hanbit-church',
   version: '1.0.0',
