@@ -5,7 +5,7 @@ export default (): ExpoConfig => ({
   name: 'San Diego Hanbit',
   slug: 'directory-mobile',
   owner: 'san-diego-hanbit-church',
-  version: '1.0.0',
+  version: '0.1.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
   splash: {
@@ -20,7 +20,7 @@ export default (): ExpoConfig => ({
   ios: {
     bundleIdentifier: 'org.sdhanbit.mobile',
     supportsTablet: true,
-    buildNumber: '1.0.0',
+    buildNumber: '0.1.0',
   },
   android: {
     adaptiveIcon: {
@@ -28,7 +28,7 @@ export default (): ExpoConfig => ({
       backgroundColor: '#FFFFFF',
     },
     package: 'org.sdhanbit.mobile',
-    versionCode: 1,
+    versionCode: 2,
   },
   web: {
     favicon: './assets/favicon.png',
