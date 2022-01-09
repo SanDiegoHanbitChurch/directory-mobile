@@ -8,6 +8,8 @@ import { getMembers, GetMembersPayload } from '../api/member';
 import MembersList from '../components/MembersList';
 import { useAuth } from '../context/auth-context';
 import { useDebounce } from '../hooks/useDebounce';
+import LoadingView from '../components/LoadingView';
+import ErrorView from '../components/ErrorView';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,7 +29,7 @@ export default function HomeScreen() {
   const debouncedSearchQuery = useDebounce(searchQuery, 1000);
 
   const { currentUser, signOut } = useAuth();
-  const { data, fetchNextPage, isFetching, isFetchingNextPage } =
+  const { data, fetchNextPage, isFetching, isFetchingNextPage, status, error } =
     useInfiniteQuery<GetMembersPayload, AxiosError>(
       ['members', debouncedSearchQuery],
       ({ pageParam }) =>
@@ -59,11 +61,17 @@ export default function HomeScreen() {
         value={searchQuery}
         platform={platform}
       />
-      <MembersList
-        members={flatData}
-        onEndReached={searchQuery === '' ? fetchNextPage : () => {}}
-        refreshing={isFetching || isFetchingNextPage}
-      />
+      {status === 'loading' ? (
+        <LoadingView message="Getting members" />
+      ) : status === 'success' ? (
+        <MembersList
+          members={flatData}
+          onEndReached={searchQuery === '' ? fetchNextPage : () => {}}
+          refreshing={isFetching || isFetchingNextPage}
+        />
+      ) : (
+        <ErrorView error={error} />
+      )}
       <Button title="Sign Out" onPress={() => signOut()} />
       <StatusBar />
     </View>

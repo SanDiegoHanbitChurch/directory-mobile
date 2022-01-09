@@ -16,7 +16,7 @@ interface LoadingViewProps {
 export default function LoadingView({ message }: LoadingViewProps) {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" />
+      <ActivityIndicator size="large" color="#0000ff" />
       {message && <Text>{message}...</Text>}
     </View>
   );

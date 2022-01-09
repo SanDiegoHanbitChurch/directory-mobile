@@ -4,6 +4,7 @@ jobs:
   publish:
     name: Install and publish
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -16,11 +17,18 @@ jobs:
       - run: npm install
       - run: expo publish --release-channel=pr-${{ github.event.number }}
         env:
+          env:
           EXPO_CLIENT_ID: ${{ secrets.EXPO_CLIENT_ID }}
           ANDROID_CLIENT_ID: ${{ secrets.ANDROID_CLIENT_ID }}
           IOS_CLIENT_ID: ${{ secrets.IOS_CLIENT_ID }}
-          WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
       - uses: unsplash/comment-on-pr@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

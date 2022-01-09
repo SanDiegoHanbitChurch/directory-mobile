@@ -1,14 +1,15 @@
+import Constants from 'expo-constants';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyATiJpM14Y8HPRLWbaL_uNhsVRjy7uqjNo',
-  authDomain: 'hanbit-directory-dev.firebaseapp.com',
-  projectId: 'hanbit-directory-dev',
-  storageBucket: 'hanbit-directory-dev.appspot.com',
-  messagingSenderId: '575510018711',
-  appId: '1:575510018711:web:f56b4085358482ee4547d2',
-  measurementId: 'G-KMQ9GC3BZJ',
+  apiKey: Constants.manifest?.extra?.firebaseApiKey,
+  authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
+  projectId: Constants.manifest?.extra?.firebaseProjectId,
+  storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,
+  messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
+  appId: Constants.manifest?.extra?.firebaseAppId,
+  measurementId: Constants.manifest?.extra?.firebaseMeasurementId,
 };
 
 const app = initializeApp(firebaseConfig);
