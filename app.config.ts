@@ -28,7 +28,7 @@ export default (): ExpoConfig => ({
       backgroundColor: '#FFFFFF',
     },
     package: 'org.sdhanbit.mobile',
-    versionCode: 2,
+    versionCode: 1,
   },
   web: {
     favicon: './assets/favicon.png',
