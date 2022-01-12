@@ -18,7 +18,7 @@ export default (): ExpoConfig => ({
   },
   assetBundlePatterns: ['**/*'],
   ios: {
-    bundleIdentifier: 'org.sdhanbit.mobile',
+    bundleIdentifier: 'org.sdhanbit.mobile2',
     supportsTablet: true,
     buildNumber: '0.1.0',
   },
@@ -27,7 +27,7 @@ export default (): ExpoConfig => ({
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#FFFFFF',
     },
-    package: 'org.sdhanbit.mobile',
+    package: 'org.sdhanbit.mobile2',
     versionCode: 1,
   },
   web: {
