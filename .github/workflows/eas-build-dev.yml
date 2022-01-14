@@ -26,16 +26,92 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.ANDROID_OAUTH_CLIENT_ID
+          value: ${{ secrets.ANDROID_OAUTH_CLIENT_ID }}
+
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.IOS_OAUTH_CLIENT_ID
+          value: ${{ secrets.IOS_OAUTH_CLIENT_ID }}
+
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.ANDROID_GOOGLE_API_KEY
+          value: ${{ secrets.ANDROID_GOOGLE_API_KEY }}
+
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.IOS_GOOGLE_API_KEY
+          value: ${{ secrets.IOS_GOOGLE_API_KEY }}
+
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.FIREBASE_API_KEY
+          value: ${{ secrets.FIREBASE_API_KEY }}
+
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.FIREBASE_AUTH_DOMAIN
+          value: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.FIREBASE_PROJECT_ID
+          value: ${{ secrets.FIREBASE_PROJECT_ID }}
+
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.FIREBASE_APP_ID
+          value: ${{ secrets.FIREBASE_APP_ID }}
+
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.FIREBASE_STORAGE_BUCKET
+          value: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.FIREBASE_MESSAGING_SENDER_ID
+          value: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.FIREBASE_MEASUREMENT_ID
+          value: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+
+      - name: Update eas.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.API_BASE_URL
+          value: ${{ secrets.API_BASE_URL }}
+
+      - name: Print eas.json
+        run: cat eas.json
+
       - name: Build on EAS
         run: npx eas-cli build --platform android --non-interactive
-        env:
-          ANDROID_CLIENT_ID: ${{ secrets.ANDROID_CLIENT_ID }}
-          IOS_CLIENT_ID: ${{ secrets.IOS_CLIENT_ID }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
-          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
-          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
-          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
-          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
