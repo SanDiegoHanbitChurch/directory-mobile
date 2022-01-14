@@ -29,11 +29,16 @@ export default (): ExpoConfig => ({
     },
     package: 'org.sdhanbit.mobile2',
     versionCode: 1,
+    config: {
+      googleSignIn: {
+        apiKey: process.env.ANDROID_GOOGLE_API_KEY,
+        certificateHash: process.env.GOOGLE_CERT_HASH,
+      },
+    },
   },
   web: {
     favicon: './assets/favicon.png',
   },
-  scheme: 'hanbit',
   extra: {
     expoClientId: process.env.EXPO_CLIENT_ID,
     androidClientId: process.env.ANDROID_CLIENT_ID,

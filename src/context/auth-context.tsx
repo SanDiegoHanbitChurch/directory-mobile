@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { onAuthStateChanged, signOut as fbSignOut, User } from 'firebase/auth';
+import * as GoogleAuth from 'expo-google-app-auth';
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithCredential,
+  signOut as fbSignOut,
+  User,
+} from 'firebase/auth';
+import Constants from 'expo-constants';
 
 import { auth } from '../firebase';
 import LoadingView from '../components/LoadingView';
@@ -11,7 +19,7 @@ interface IAuthProviderState {
 
 interface IAuthContext {
   currentUser: User | null;
-  signIn: (user: User) => void;
+  signIn: () => void;
   signOut: () => void;
 }
 
@@ -50,15 +58,36 @@ function AuthProvider(props: AuthProviderProps) {
     };
   }, []);
 
-  if (state.loading) {
-    return <LoadingView />;
-  }
-
-  function signIn(user: User) {
-    setState({
-      loading: false,
-      currentUser: user,
-    });
+  async function signIn() {
+    try {
+      console.log('signing in');
+      const logInResult: GoogleAuth.LogInResult = await GoogleAuth.logInAsync({
+        androidClientId: Constants.manifest?.extra?.androidClientId,
+        iosClientId: Constants.manifest?.extra?.iosClientId,
+      });
+      if (logInResult.type === 'success') {
+        // Login successful. Get ID token & access token and sign in with credential.
+        const { idToken, accessToken } = logInResult;
+        const credential = GoogleAuthProvider.credential(idToken, accessToken);
+        const { user } = await signInWithCredential(auth, credential);
+        setState({
+          loading: false,
+          currentUser: user,
+        });
+      } else {
+        // Login unsuccessful.
+        setState({
+          loading: false,
+          currentUser: null,
+        });
+      }
+    } catch (error) {
+      // Login unsuccessful.
+      setState({
+        loading: false,
+        currentUser: null,
+      });
+    }
   }
 
   async function signOut() {
@@ -78,6 +107,10 @@ function AuthProvider(props: AuthProviderProps) {
         currentUser: null,
       });
     }
+  }
+
+  if (state.loading) {
+    return <LoadingView />;
   }
 
   return (
