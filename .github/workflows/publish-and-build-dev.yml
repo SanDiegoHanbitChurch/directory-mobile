@@ -71,11 +71,11 @@ jobs:
           field: build.development.env.ANDROID_GOOGLE_API_KEY
           value: ${{ secrets.ANDROID_GOOGLE_API_KEY }}
       - name: Update eas.json ANDROID_GOOGLE_CERT_HASH
-      uses: jossef/action-set-json-field@v1
-      with:
-        file: eas.json
-        field: build.development.env.ANDROID_GOOGLE_CERT_HASH
-        value: ${{ secrets.ANDROID_GOOGLE_CERT_HASH }}
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: eas.json
+          field: build.development.env.ANDROID_GOOGLE_CERT_HASH
+          value: ${{ secrets.ANDROID_GOOGLE_CERT_HASH }}
       - name: Update eas.json IOS_URL_SCHEME
         uses: jossef/action-set-json-field@v1
         with:
