@@ -1,124 +1,136 @@
-name: EAS Build Dev APK
+name: Publish and Build Dev
 on: [pull_request]
-
 jobs:
+  publish:
+    name: Install and publish to Expo
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - uses: expo/expo-github-action@v6
+        with:
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: npm install
+      - run: expo publish --release-channel=pr-${{ github.event.number }}
+        env:
+          ANDROID_OAUTH_CLIENT_ID: ${{ secrets.ANDROID_OAUTH_CLIENT_ID }}
+          IOS_OAUTH_CLIENT_ID: ${{ secrets.IOS_OAUTH_CLIENT_ID }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+      - uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: App is ready for review, you can [see it here](https://expo.dev/@san-diego-hanbit-church/directory-mobile?release-channel=pr-${{ github.event.number }}).
+
   build:
     name: Install and build development profile
     runs-on: ubuntu-latest
     environment: dev
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 16.x
-
       - name: Setup Expo
         uses: expo/expo-github-action@v5
         with:
           expo-version: 4.x
           expo-token: ${{ secrets.EXPO_TOKEN }}
           expo-cache: true
-
       - name: Install dependencies
         run: npm ci
-
       - name: Update eas.json ANDROID_OAUTH_CLIENT_ID
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.ANDROID_OAUTH_CLIENT_ID
           value: ${{ secrets.ANDROID_OAUTH_CLIENT_ID }}
-
       - name: Update eas.json IOS_OAUTH_CLIENT_ID
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.IOS_OAUTH_CLIENT_ID
           value: ${{ secrets.IOS_OAUTH_CLIENT_ID }}
-
       - name: Update eas.json ANDROID_GOOGLE_API_KEY
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.ANDROID_GOOGLE_API_KEY
           value: ${{ secrets.ANDROID_GOOGLE_API_KEY }}
-
-      - name: Update eas.json IOS_GOOGLE_API_KEY
-        uses: jossef/action-set-json-field@v1
-        with:
-          file: eas.json
-          field: build.development.env.IOS_GOOGLE_API_KEY
-          value: ${{ secrets.IOS_GOOGLE_API_KEY }}
-
+      - name: Update eas.json ANDROID_GOOGLE_CERT_HASH
+      uses: jossef/action-set-json-field@v1
+      with:
+        file: eas.json
+        field: build.development.env.ANDROID_GOOGLE_CERT_HASH
+        value: ${{ secrets.ANDROID_GOOGLE_CERT_HASH }}
       - name: Update eas.json IOS_URL_SCHEME
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.IOS_URL_SCHEME
           value: ${{ secrets.IOS_URL_SCHEME }}
-
       - name: Update eas.json FIREBASE_API_KEY
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.FIREBASE_API_KEY
           value: ${{ secrets.FIREBASE_API_KEY }}
-
       - name: Update eas.json FIREBASE_AUTH_DOMAIN
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.FIREBASE_AUTH_DOMAIN
           value: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
-
       - name: Update eas.json FIREBASE_PROJECT_ID
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.FIREBASE_PROJECT_ID
           value: ${{ secrets.FIREBASE_PROJECT_ID }}
-
       - name: Update eas.json FIREBASE_APP_ID
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.FIREBASE_APP_ID
           value: ${{ secrets.FIREBASE_APP_ID }}
-
       - name: Update eas.json FIREBASE_STORAGE_BUCKET
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.FIREBASE_STORAGE_BUCKET
           value: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
-
       - name: Update eas.json FIREBASE_MESSAGING_SENDER_ID
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.FIREBASE_MESSAGING_SENDER_ID
           value: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
-
       - name: Update eas.json FIREBASE_MEASUREMENT_ID
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.FIREBASE_MEASUREMENT_ID
           value: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
-
       - name: Update eas.json API_BASE_URL
         uses: jossef/action-set-json-field@v1
         with:
           file: eas.json
           field: build.development.env.API_BASE_URL
           value: ${{ secrets.API_BASE_URL }}
-
       - name: Print eas.json
         run: cat eas.json
-
       - name: Build on EAS
-        run: npx eas-cli build --platform android --non-interactive
+        run: npx eas-cli build --platform android --profile development --non-interactive

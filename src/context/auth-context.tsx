@@ -59,11 +59,14 @@ function AuthProvider(props: AuthProviderProps) {
   }, []);
 
   async function signIn() {
+    setState({
+      loading: true,
+      currentUser: null,
+    });
     try {
-      console.log('signing in');
       const logInResult: GoogleAuth.LogInResult = await GoogleAuth.logInAsync({
-        androidClientId: Constants.manifest?.extra?.androidClientId,
-        iosClientId: Constants.manifest?.extra?.iosClientId,
+        androidClientId: Constants.manifest?.extra?.androidOauthClientId,
+        iosClientId: Constants.manifest?.extra?.iosOauthClientId,
       });
       if (logInResult.type === 'success') {
         // Login successful. Get ID token & access token and sign in with credential.
