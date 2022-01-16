@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, Text } from 'react-native';
+import Constants from 'expo-constants';
 
 import { useAuth } from '../context/auth-context';
 import GoogleSignInButton from '../components/GoogleSignInButton';
@@ -22,6 +23,7 @@ export default function SignInScreen() {
 
   return (
     <View style={styles.container}>
+      <Text>App type: {Constants.appOwnership}</Text>
       <Image source={logo} style={styles.logo} />
       <GoogleSignInButton onPress={() => signIn()} />
       <StatusBar />
