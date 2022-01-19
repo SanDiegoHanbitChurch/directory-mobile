@@ -32,7 +32,7 @@ type AuthProviderProps = {
 
 function AuthProvider(props: AuthProviderProps) {
   // ! Potential error: using useIdTokenAuthRequest for Firebase vs useAuthRequest
-  const [, , promptAsync] = Google.useAuthRequest(authConfig);
+  const [, response, promptAsync] = Google.useAuthRequest(authConfig);
 
   const [state, setState] = React.useState<IAuthProviderState>({
     loading: true,
@@ -68,10 +68,11 @@ function AuthProvider(props: AuthProviderProps) {
       currentUser: null,
     });
     try {
-      const result = await promptAsync();
-      if (result.type === 'success') {
+      await promptAsync();
+      if (response?.type === 'success') {
         // Login successful. Get ID token & access token and sign in with credential.
-        const { accessToken, idToken } = result.authentication as TokenResponse;
+        const { accessToken, idToken } =
+          response.authentication as TokenResponse;
         const credential = GoogleAuthProvider.credential(idToken, accessToken);
         const { user } = await signInWithCredential(auth, credential);
         setState({
