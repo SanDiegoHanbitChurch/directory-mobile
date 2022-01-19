@@ -17,8 +17,7 @@ jobs:
       - run: npm install
       - run: expo publish --release-channel=pr-${{ github.event.number }}
         env:
-          ANDROID_OAUTH_CLIENT_ID: ${{ secrets.ANDROID_EXPO_OAUTH_CLIENT_ID }}
-          IOS_OAUTH_CLIENT_ID: ${{ secrets.IOS_EXPO_OAUTH_CLIENT_ID }}
+          EXPO_OAUTH_CLIENT_ID: ${{ secrets.EXPO_OAUTH_CLIENT_ID }}
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}

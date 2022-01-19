@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as GoogleAuth from 'expo-google-app-auth';
+import * as Google from 'expo-auth-session/providers/google';
 import {
   GoogleAuthProvider,
   onAuthStateChanged,
@@ -30,6 +30,9 @@ type AuthProviderProps = {
 };
 
 function AuthProvider(props: AuthProviderProps) {
+  // ! Potential error: using useIdTokenAuthRequest for Firebase vs useAuthRequest
+  const [, , promptAsync] = Google.useIdTokenAuthRequest(authConfig);
+
   const [state, setState] = React.useState<IAuthProviderState>({
     loading: true,
     currentUser: null,
@@ -64,13 +67,11 @@ function AuthProvider(props: AuthProviderProps) {
       currentUser: null,
     });
     try {
-      const logInResult: GoogleAuth.LogInResult = await GoogleAuth.logInAsync(
-        authConfig
-      );
-      if (logInResult.type === 'success') {
+      const result = await promptAsync();
+      if (result.type === 'success') {
         // Login successful. Get ID token & access token and sign in with credential.
-        const { idToken, accessToken } = logInResult;
-        const credential = GoogleAuthProvider.credential(idToken, accessToken);
+        const { id_token: idToken } = result.params;
+        const credential = GoogleAuthProvider.credential(idToken);
         const { user } = await signInWithCredential(auth, credential);
         setState({
           loading: false,

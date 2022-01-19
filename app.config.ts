@@ -21,15 +21,11 @@ export default (): ExpoConfig => ({
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ['**/*'],
+  scheme: identifier,
   ios: {
     bundleIdentifier: identifier,
     supportsTablet: true,
     buildNumber: version,
-    config: {
-      googleSignIn: {
-        reservedClientId: process.env.IOS_URL_SCHEME,
-      },
-    },
   },
   android: {
     adaptiveIcon: {
@@ -38,12 +34,6 @@ export default (): ExpoConfig => ({
     },
     package: identifier,
     versionCode: 1,
-    config: {
-      googleSignIn: {
-        apiKey: process.env.ANDROID_GOOGLE_API_KEY,
-        certificateHash: process.env.ANDROID_GOOGLE_CERT_HASH,
-      },
-    },
   },
   web: {
     favicon: './assets/favicon.png',
@@ -51,6 +41,8 @@ export default (): ExpoConfig => ({
   extra: {
     // Base URL for `directory-service` API
     apiBaseUrl: process.env.API_BASE_URL,
+    // Expo OAuth Client Id (from Google Cloud Console)
+    expoOauthClientId: process.env.EXPO_OAUTH_CLIENT_ID,
     // Android OAuth Client Id (from Google Cloud Console)
     androidOauthClientId: process.env.ANDROID_OAUTH_CLIENT_ID,
     // iOS OAuth Client Id (from Google Cloud Console)
