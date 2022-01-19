@@ -7,9 +7,9 @@ import {
   signOut as fbSignOut,
   User,
 } from 'firebase/auth';
-import Constants from 'expo-constants';
+import { Alert } from 'react-native';
 
-import { auth } from '../firebase';
+import { auth, authConfig } from '../firebase';
 import LoadingView from '../components/LoadingView';
 
 interface IAuthProviderState {
@@ -64,10 +64,9 @@ function AuthProvider(props: AuthProviderProps) {
       currentUser: null,
     });
     try {
-      const logInResult: GoogleAuth.LogInResult = await GoogleAuth.logInAsync({
-        androidClientId: Constants.manifest?.extra?.androidOauthClientId,
-        iosClientId: Constants.manifest?.extra?.iosOauthClientId,
-      });
+      const logInResult: GoogleAuth.LogInResult = await GoogleAuth.logInAsync(
+        authConfig
+      );
       if (logInResult.type === 'success') {
         // Login successful. Get ID token & access token and sign in with credential.
         const { idToken, accessToken } = logInResult;
@@ -77,19 +76,22 @@ function AuthProvider(props: AuthProviderProps) {
           loading: false,
           currentUser: user,
         });
+        Alert.alert('Sign in successful.');
       } else {
         // Login unsuccessful.
         setState({
           loading: false,
           currentUser: null,
         });
+        Alert.alert('Error: Could not sign in.');
       }
-    } catch (error) {
+    } catch (error: any) {
       // Login unsuccessful.
       setState({
         loading: false,
         currentUser: null,
       });
+      Alert.alert('Error: Could not sign in.', (error as Error).message);
     }
   }
 

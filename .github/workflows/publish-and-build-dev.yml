@@ -17,8 +17,8 @@ jobs:
       - run: npm install
       - run: expo publish --release-channel=pr-${{ github.event.number }}
         env:
-          ANDROID_OAUTH_CLIENT_ID: ${{ secrets.ANDROID_OAUTH_CLIENT_ID }}
-          IOS_OAUTH_CLIENT_ID: ${{ secrets.IOS_OAUTH_CLIENT_ID }}
+          ANDROID_OAUTH_CLIENT_ID: ${{ secrets.ANDROID_EXPO_OAUTH_CLIENT_ID }}
+          IOS_OAUTH_CLIENT_ID: ${{ secrets.IOS_EXPO_OAUTH_CLIENT_ID }}
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
@@ -35,6 +35,7 @@ jobs:
 
   build:
     name: Install and build development profile
+    needs: publish
     runs-on: ubuntu-latest
     environment: dev
     steps:

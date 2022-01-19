@@ -19,14 +19,13 @@ export const auth = getAuth(app);
 
 // Create Google auth config with client IDs.
 // If app ownership is 'null', the config for standalone apps built with EAS build will be used.
-export const authConfig: GoogleLogInConfig =
-  Constants.appOwnership === null
-    ? {
-        androidStandaloneAppClientId:
-          Constants.manifest?.extra?.androidOauthClientId,
-        iosStandaloneAppClientId: Constants.manifest?.extra?.iosOauthClientId,
-      }
-    : {
-        androidClientId: Constants.manifest?.extra?.androidOauthClientId,
-        iosClientId: Constants.manifest?.extra?.iosOauthClientId,
-      };
+export const authConfig: GoogleLogInConfig = Constants.appOwnership
+  ? {
+      androidClientId: Constants.manifest?.extra?.androidOauthClientId,
+      iosClientId: Constants.manifest?.extra?.iosOauthClientId,
+    }
+  : {
+      androidStandaloneAppClientId:
+        Constants.manifest?.extra?.androidOauthClientId,
+      iosStandaloneAppClientId: Constants.manifest?.extra?.iosOauthClientId,
+    };
