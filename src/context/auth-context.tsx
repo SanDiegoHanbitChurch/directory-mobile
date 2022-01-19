@@ -1,7 +1,6 @@
 import * as React from 'react';
-import * as Google from 'expo-auth-session/providers/google';
 import {
-  GoogleAuthProvider,
+  AuthCredential,
   onAuthStateChanged,
   signInWithCredential,
   signOut as fbSignOut,
@@ -9,8 +8,7 @@ import {
 } from 'firebase/auth';
 import { Alert } from 'react-native';
 
-import { TokenResponse } from 'expo-auth-session';
-import { auth, authConfig } from '../firebase';
+import { auth } from '../firebase';
 import LoadingView from '../components/LoadingView';
 
 interface IAuthProviderState {
@@ -20,7 +18,7 @@ interface IAuthProviderState {
 
 interface IAuthContext {
   currentUser: User | null;
-  signIn: () => void;
+  signIn: (credential: AuthCredential) => void;
   signOut: () => void;
 }
 
@@ -31,9 +29,6 @@ type AuthProviderProps = {
 };
 
 function AuthProvider(props: AuthProviderProps) {
-  // ! Potential error: using useIdTokenAuthRequest for Firebase vs useAuthRequest
-  const [, response, promptAsync] = Google.useAuthRequest(authConfig);
-
   const [state, setState] = React.useState<IAuthProviderState>({
     loading: true,
     currentUser: null,
@@ -62,32 +57,18 @@ function AuthProvider(props: AuthProviderProps) {
     };
   }, []);
 
-  async function signIn() {
+  async function signIn(credential: AuthCredential) {
     setState({
       loading: true,
       currentUser: null,
     });
     try {
-      await promptAsync();
-      if (response?.type === 'success') {
-        // Login successful. Get ID token & access token and sign in with credential.
-        const { accessToken, idToken } =
-          response.authentication as TokenResponse;
-        const credential = GoogleAuthProvider.credential(idToken, accessToken);
-        const { user } = await signInWithCredential(auth, credential);
-        setState({
-          loading: false,
-          currentUser: user,
-        });
-        Alert.alert('Sign in successful.');
-      } else {
-        // Login unsuccessful.
-        setState({
-          loading: false,
-          currentUser: null,
-        });
-        Alert.alert('Error: Could not sign in.');
-      }
+      const { user } = await signInWithCredential(auth, credential);
+      setState({
+        loading: false,
+        currentUser: user,
+      });
+      Alert.alert('Sign in successful.');
     } catch (error: any) {
       // Login unsuccessful.
       setState({
