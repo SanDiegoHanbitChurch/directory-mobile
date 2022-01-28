@@ -29,7 +29,7 @@ export default function MemberListItem({ member }: MemberListItemProps) {
     Linking.openURL(`tel:${member.phone}`);
   };
 
-  const openMap = async () => {
+  const openMap = () => {
     const destination = encodeURIComponent(
       `${member.address.street} ${member.address.zip}, ${member.address.city}`
     );
@@ -42,9 +42,7 @@ export default function MemberListItem({ member }: MemberListItemProps) {
       if (link === undefined) {
         throw new Error('Platform not recognized or supported.');
       }
-      const supported = await Linking.canOpenURL(link);
-
-      if (supported) Linking.openURL(link);
+      Linking.openURL(link);
     } catch (error: any) {
       Alert.alert('Error: Cannot open map.', error.message);
     }
