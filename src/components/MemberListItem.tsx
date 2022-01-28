@@ -33,15 +33,20 @@ export default function MemberListItem({ member }: MemberListItemProps) {
     const destination = encodeURIComponent(
       `${member.address.street} ${member.address.zip}, ${member.address.city}`
     );
-    const provider = Platform.OS === 'ios' ? 'apple' : 'google';
-    const link = `http://maps.${provider}.com/?daddr=${destination}`;
+    const link = Platform.select({
+      ios: `http://maps.apple.com/?daddr=${destination}`,
+      android: `geo:0,0?q=${destination}`,
+    });
 
     try {
+      if (link === undefined) {
+        throw new Error('Platform not recognized or supported.');
+      }
       const supported = await Linking.canOpenURL(link);
 
       if (supported) Linking.openURL(link);
-    } catch (error) {
-      Alert.alert('Error', 'Cannot open map URL.');
+    } catch (error: any) {
+      Alert.alert('Error: Cannot open map.', error.message);
     }
   };
 
