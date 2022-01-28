@@ -1,5 +1,7 @@
 name: Build and Submit for Production
-on: [pull_request]
+on:
+  push:
+    branches: main
 jobs:
   build:
     name: Install and build production profile
