@@ -35,7 +35,7 @@ export default function MemberListItem({ member }: MemberListItemProps) {
     );
     const link = Platform.select({
       ios: `http://maps.apple.com/?daddr=${destination}`,
-      android: `geo:0,0?q=${destination}`,
+      android: `https://www.google.com/maps/dir/?api=1&destination=${destination}`,
     });
 
     try {
