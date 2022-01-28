@@ -33,7 +33,7 @@ jobs:
           msg: App is ready for review, you can [see it here](https://expo.dev/@san-diego-hanbit-church/directory-mobile?release-channel=pr-${{ github.event.number }}).
 
   build:
-    name: Install and build development profile
+    name: Install and build development profile.
     needs: publish
     runs-on: ubuntu-latest
     environment: dev
