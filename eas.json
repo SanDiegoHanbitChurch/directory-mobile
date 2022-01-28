@@ -11,14 +11,17 @@
         "gradleCommand": ":app:assembleRelease"
       }
     },
-    "preview": {
-      "distribution": "internal"
-    },
     "production": {
-      "env": {}
+      "android": {
+        "track": "production"
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "track": "production"
+      }
+    }
   }
 }
