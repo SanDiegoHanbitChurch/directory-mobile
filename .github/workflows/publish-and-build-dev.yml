@@ -119,7 +119,6 @@ jobs:
 
   buildprod:
     name: Install and build production profile (delete this later!!!)
-    needs: publish
     runs-on: ubuntu-latest
     environment: live
     steps:
