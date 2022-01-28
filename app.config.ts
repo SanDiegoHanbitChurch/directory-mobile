@@ -1,11 +1,15 @@
 import { ExpoConfig } from '@expo/config';
 import 'dotenv/config';
 
+// Set metadata here:
+const version = '0.1.0';
+const identifier = 'org.sdhanbit.mobile2';
+
 export default (): ExpoConfig => ({
-  name: 'San Diego Hanbit',
+  name: 'San Diego Hanbit Church',
   slug: 'directory-mobile',
   owner: 'san-diego-hanbit-church',
-  version: '0.1.0',
+  version,
   orientation: 'portrait',
   icon: './assets/icon.png',
   splash: {
@@ -17,29 +21,33 @@ export default (): ExpoConfig => ({
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ['**/*'],
+  scheme: identifier,
   ios: {
-    bundleIdentifier: 'org.sdhanbit.mobile2',
+    bundleIdentifier: identifier,
     supportsTablet: true,
-    buildNumber: '0.1.0',
+    buildNumber: version,
   },
   android: {
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#FFFFFF',
     },
-    package: 'org.sdhanbit.mobile2',
+    package: identifier,
     versionCode: 1,
   },
   web: {
     favicon: './assets/favicon.png',
   },
-  scheme: 'hanbit',
   extra: {
-    expoClientId: process.env.EXPO_CLIENT_ID,
-    androidClientId: process.env.ANDROID_CLIENT_ID,
-    iosClientId: process.env.IOS_CLIENT_ID,
-    webClientId: process.env.WEB_CLIENT_ID,
+    // Base URL for `directory-service` API
     apiBaseUrl: process.env.API_BASE_URL,
+    // Expo OAuth Client Id (from Google Cloud Console)
+    expoOauthClientId: process.env.EXPO_OAUTH_CLIENT_ID,
+    // Android OAuth Client Id (from Google Cloud Console)
+    androidOauthClientId: process.env.ANDROID_OAUTH_CLIENT_ID,
+    // iOS OAuth Client Id (from Google Cloud Console)
+    iosOauthClientId: process.env.IOS_OAUTH_CLIENT_ID,
+    // Firebase Config
     firebaseApiKey: process.env.FIREBASE_API_KEY,
     firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN,
     firebaseProjectId: process.env.FIREBASE_PROJECT_ID,

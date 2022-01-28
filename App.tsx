@@ -1,4 +1,5 @@
 import * as React from 'react';
+import 'expo-dev-client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider } from 'react-native-elements';

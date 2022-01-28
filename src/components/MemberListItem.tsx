@@ -29,19 +29,22 @@ export default function MemberListItem({ member }: MemberListItemProps) {
     Linking.openURL(`tel:${member.phone}`);
   };
 
-  const openMap = async () => {
+  const openMap = () => {
     const destination = encodeURIComponent(
       `${member.address.street} ${member.address.zip}, ${member.address.city}`
     );
-    const provider = Platform.OS === 'ios' ? 'apple' : 'google';
-    const link = `http://maps.${provider}.com/?daddr=${destination}`;
+    const link = Platform.select({
+      ios: `http://maps.apple.com/?daddr=${destination}`,
+      android: `https://www.google.com/maps/dir/?api=1&destination=${destination}`,
+    });
 
     try {
-      const supported = await Linking.canOpenURL(link);
-
-      if (supported) Linking.openURL(link);
-    } catch (error) {
-      Alert.alert('Error', 'Cannot open map URL.');
+      if (link === undefined) {
+        throw new Error('Platform not recognized or supported.');
+      }
+      Linking.openURL(link);
+    } catch (error: any) {
+      Alert.alert('Error: Cannot open map.', error.message);
     }
   };
 

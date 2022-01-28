@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { onAuthStateChanged, signOut as fbSignOut, User } from 'firebase/auth';
+import {
+  AuthCredential,
+  onAuthStateChanged,
+  signInWithCredential,
+  signOut as fbSignOut,
+  User,
+} from 'firebase/auth';
+import { Alert } from 'react-native';
 
 import { auth } from '../firebase';
 import LoadingView from '../components/LoadingView';
@@ -11,7 +18,7 @@ interface IAuthProviderState {
 
 interface IAuthContext {
   currentUser: User | null;
-  signIn: (user: User) => void;
+  signIn: (credential: AuthCredential) => void;
   signOut: () => void;
 }
 
@@ -50,15 +57,26 @@ function AuthProvider(props: AuthProviderProps) {
     };
   }, []);
 
-  if (state.loading) {
-    return <LoadingView />;
-  }
-
-  function signIn(user: User) {
+  async function signIn(credential: AuthCredential) {
     setState({
-      loading: false,
-      currentUser: user,
+      loading: true,
+      currentUser: null,
     });
+    try {
+      const { user } = await signInWithCredential(auth, credential);
+      setState({
+        loading: false,
+        currentUser: user,
+      });
+      Alert.alert('Sign in successful.');
+    } catch (error: any) {
+      // Login unsuccessful.
+      setState({
+        loading: false,
+        currentUser: null,
+      });
+      Alert.alert('Error: Could not sign in.', (error as Error).message);
+    }
   }
 
   async function signOut() {
@@ -78,6 +96,10 @@ function AuthProvider(props: AuthProviderProps) {
         currentUser: null,
       });
     }
+  }
+
+  if (state.loading) {
+    return <LoadingView />;
   }
 
   return (
