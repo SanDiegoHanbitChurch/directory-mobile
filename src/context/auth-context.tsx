@@ -64,18 +64,22 @@ function AuthProvider(props: AuthProviderProps) {
     });
     try {
       const { user } = await signInWithCredential(auth, credential);
-      setState({
-        loading: false,
-        currentUser: user,
-      });
-      Alert.alert('Sign in successful.');
+      if (user.email?.includes('@sdhanbit.org')) {
+        setState({
+          loading: false,
+          currentUser: user,
+        });
+        Alert.alert('Sign in successful.');
+      } else {
+        throw new Error('Email domain is not valid.');
+      }
     } catch (error: any) {
-      // Login unsuccessful.
+      // Sign in unsuccessful.
       setState({
         loading: false,
         currentUser: null,
       });
-      Alert.alert('Error: Could not sign in.', (error as Error).message);
+      Alert.alert('Could not sign in', (error as Error).message);
     }
   }
 
