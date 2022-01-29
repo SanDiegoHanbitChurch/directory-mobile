@@ -11,12 +11,7 @@
         "gradleCommand": ":app:assembleRelease"
       }
     },
-    "preview": {
-      "distribution": "internal"
-    },
-    "production": {
-      "env": {}
-    }
+    "production": {}
   },
   "submit": {
     "production": {}
